@@ -6,22 +6,35 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()  # New clock object for FPS limiting
-    dt = 0  # Delta time initialized
+    
+    # 1. Create our groups
+    updatables = pygame.sprite.Group()
+    drawables  = pygame.sprite.Group()
+    
+    # 2. Tell Player to auto-add itself to both groups
+    Player.containers = (updatables, drawables)
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    # 3. Instantiate after setting containers
+    Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
     while True:
+        dt = clock.tick(60) / 1000
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         
-        player.update(dt)      
+        # 4. Update everything in one call
+        updatables.update(dt)
+
         screen.fill((0, 0, 0))
-        player.draw(screen)
+       
+         # 5. Draw each sprite
+        for sprite in drawables:
+            sprite.draw(screen)
+
         pygame.display.flip()
-
-        dt = clock.tick(60) / 1000
-
+        
 if __name__ == "__main__":
     main()
 
