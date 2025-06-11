@@ -40,10 +40,18 @@ def main():
 
         # Check for collisions
         for asteroid in asteroids:
+            # Check player-asteroid collisions
             if asteroid.collides_with(player):
                 print("Game over!")
                 pygame.quit()
                 sys.exit()
+            
+            # Check bullet-asteroid collisions
+            for shot in shots:
+                if asteroid.collides_with(shot):
+                    asteroid.split()
+                    shot.kill()
+                    break  # Break inner loop since asteroid is destroyed
 
         # Draw everything
         screen.fill("black")
